@@ -1,8 +1,15 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import * as z from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import * as z from "zod";
 
 const loginSchema = z.object({
   serverName: z.string().min(1, "You must provide a server name"),
@@ -11,16 +18,20 @@ const loginSchema = z.object({
   hostName: z.string().url("URL must be valid (e.g., https://google.com)"),
 });
 
+export type LoginFormValue = z.infer<typeof loginSchema>;
 
 interface AddServerProps {
-  onSubmit: (data: z.infer<typeof loginSchema>)=>void
+  onSubmit: (data: LoginFormValue) => void;
 }
-const AddServerForm = ({onSubmit}: AddServerProps) => {
-  const { control, handleSubmit, formState: { errors } } = useForm({
+const AddServerForm = ({ onSubmit }: AddServerProps) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(loginSchema),
-    defaultValues: { serverName: '', userName: '', password: '', hostName: '' }
+    defaultValues: { serverName: "", userName: "", password: "", hostName: "" },
   });
-
 
   return (
     <ScrollView style={styles.container}>
@@ -30,7 +41,7 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
         control={control}
         name="serverName"
         render={({ field: { onChange, value } }) => (
-          <TextInput 
+          <TextInput
             style={[styles.input, errors.serverName && styles.errorInput]}
             onChangeText={onChange}
             value={value}
@@ -38,7 +49,9 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
           />
         )}
       />
-      {errors.serverName && <Text style={styles.errorText}>{errors.serverName.message}</Text>}
+      {errors.serverName && (
+        <Text style={styles.errorText}>{errors.serverName.message}</Text>
+      )}
 
       {/* Server URL */}
       <Text style={styles.label}>Server URL</Text>
@@ -46,7 +59,7 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
         control={control}
         name="hostName"
         render={({ field: { onChange, value } }) => (
-          <TextInput 
+          <TextInput
             style={[styles.input, errors.hostName && styles.errorInput]}
             onChangeText={onChange}
             value={value}
@@ -56,7 +69,9 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
           />
         )}
       />
-      {errors.hostName && <Text style={styles.errorText}>{errors.hostName.message}</Text>}
+      {errors.hostName && (
+        <Text style={styles.errorText}>{errors.hostName.message}</Text>
+      )}
 
       {/* Username */}
       <Text style={styles.label}>Username</Text>
@@ -64,7 +79,7 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
         control={control}
         name="userName"
         render={({ field: { onChange, value } }) => (
-          <TextInput 
+          <TextInput
             style={[styles.input, errors.userName && styles.errorInput]}
             onChangeText={onChange}
             value={value}
@@ -72,7 +87,9 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
           />
         )}
       />
-      {errors.userName && <Text style={styles.errorText}>{errors.userName.message}</Text>}
+      {errors.userName && (
+        <Text style={styles.errorText}>{errors.userName.message}</Text>
+      )}
 
       {/* Password field */}
       <Text style={styles.label}>Password</Text>
@@ -80,7 +97,7 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
         control={control}
         name="password"
         render={({ field: { onChange, value } }) => (
-          <TextInput 
+          <TextInput
             style={[styles.input, errors.password && styles.errorInput]}
             onChangeText={onChange}
             value={value}
@@ -88,10 +105,16 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
           />
         )}
       />
-      {errors.password && <Text style={styles.errorText}>{errors.password.message}</Text>}
+      {errors.password && (
+        <Text style={styles.errorText}>{errors.password.message}</Text>
+      )}
 
       <View style={{ marginTop: 30, marginBottom: 50 }}>
-        <Button title="Add server" onPress={handleSubmit(onSubmit)} color="#6200EE" />
+        <Button
+          title="Add server"
+          onPress={handleSubmit(onSubmit)}
+          color="#6200EE"
+        />
       </View>
     </ScrollView>
   );
@@ -100,9 +123,9 @@ const AddServerForm = ({onSubmit}: AddServerProps) => {
 const styles = StyleSheet.create({
   container: { padding: 20 },
   label: { fontSize: 16, marginBottom: 5, marginTop: 10 },
-  input: { borderBottomWidth: 1, padding: 8, borderColor: '#ccc' },
-  errorInput: { borderColor: 'red' },
-  errorText: { color: 'red', fontSize: 12, marginTop: 4 },
+  input: { borderBottomWidth: 1, padding: 8, borderColor: "#ccc" },
+  errorInput: { borderColor: "red" },
+  errorText: { color: "red", fontSize: 12, marginTop: 4 },
 });
 
 export default AddServerForm;
