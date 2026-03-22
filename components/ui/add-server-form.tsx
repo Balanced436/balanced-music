@@ -11,17 +11,16 @@ const loginSchema = z.object({
   hostName: z.string().url("URL must be valid (e.g., https://google.com)"),
 });
 
-const AddServerForm = () => {
+
+interface AddServerProps {
+  onSubmit: (data: z.infer<typeof loginSchema>)=>void
+}
+const AddServerForm = ({onSubmit}: AddServerProps) => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: { serverName: '', userName: '', password: '', hostName: '' }
   });
 
-  const onSubmit = (data: z.infer<typeof loginSchema>) => {
-    console.log("Data ready:", data);
-
-    // dispatch(registerUser(data));
-  };
 
   return (
     <ScrollView style={styles.container}>
