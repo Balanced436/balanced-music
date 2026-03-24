@@ -1,14 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Button, TextInput } from 'react-native-paper';
+import { Controller, useForm, UseFormSetError } from "react-hook-form";
+import { Button, TextInput } from "react-native-paper";
 
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import * as z from "zod";
 
 const loginSchema = z.object({
@@ -21,32 +16,53 @@ const loginSchema = z.object({
 export type LoginFormValue = z.infer<typeof loginSchema>;
 
 interface AddServerProps {
-  onSubmit: (data: LoginFormValue) => void;
+  onSubmit: (
+    data: LoginFormValue,
+    setError: UseFormSetError<LoginFormValue>,
+  ) => void;
+  isLoading: boolean;
 }
-const AddServerForm = ({ onSubmit }: AddServerProps) => {
+
+const AddServerForm = ({ onSubmit, isLoading = false }: AddServerProps) => {
   const {
     control,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    defaultValues: { serverName: "server.name", userName: "", password: "", hostName: "https://navidrome.isaid.fr" },
+    defaultValues: {
+      serverName: "server.name",
+      userName: "",
+      password: "",
+      hostName: "https://navidrome.isaid.fr",
+    },
   });
+
+  const internalSubmit = (data: LoginFormValue) => {
+    onSubmit(data, setError); // On passe data ET s etError au parent
+  };
 
   return (
     <ScrollView style={styles.container}>
       {/* Server name */}
+      {errors.root && (
+        <View style={styles.globalError}>
+          <Text style={styles.errorText}>{errors.root.message}</Text>
+        </View>
+      )}
       <Text style={styles.label}>Server Name</Text>
       <Controller
         control={control}
         name="serverName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-              mode="flat"
+            mode="flat"
             style={[styles.input, errors.serverName && styles.errorInput]}
             onChangeText={onChange}
             value={value}
             placeholder="vps.server"
+            error={!!errors.serverName}
           />
         )}
       />
@@ -61,13 +77,14 @@ const AddServerForm = ({ onSubmit }: AddServerProps) => {
         name="hostName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-              mode="flat"
+            mode="flat"
             style={[styles.input, errors.hostName && styles.errorInput]}
             onChangeText={onChange}
             value={value}
             placeholder="https://navidrome.example.com"
             autoCapitalize="none"
             keyboardType="url"
+            error={!!errors.hostName}
           />
         )}
       />
@@ -82,11 +99,12 @@ const AddServerForm = ({ onSubmit }: AddServerProps) => {
         name="userName"
         render={({ field: { onChange, value } }) => (
           <TextInput
-              mode="flat"
+            mode="flat"
             style={[styles.input, errors.userName && styles.errorInput]}
             onChangeText={onChange}
             value={value}
             placeholder="Username"
+            error={!!errors.userName}
           />
         )}
       />
@@ -101,24 +119,30 @@ const AddServerForm = ({ onSubmit }: AddServerProps) => {
         name="password"
         render={({ field: { onChange, value } }) => (
           <TextInput
-              mode="flat"
+            mode="flat"
             style={[styles.input, errors.password && styles.errorInput]}
             onChangeText={onChange}
             value={value}
             secureTextEntry
+            error={!!errors.password}
           />
         )}
       />
       {errors.password && (
-          <View><Text style={styles.errorText}>{errors.password.message}</Text></View>
+        <View>
+          <Text style={styles.errorText}>{errors.password.message}</Text>
+        </View>
       )}
 
       <View style={{ marginTop: 30, marginBottom: 50 }}>
         <Button
-            icon="plus"
-            mode={"contained"}
-          onPress={handleSubmit(onSubmit)}
-        >Add server</Button>
+          disabled={isLoading}
+          loading={isLoading}
+          mode={"contained"}
+          onPress={handleSubmit(internalSubmit)}
+        >
+          Add server
+        </Button>
       </View>
     </ScrollView>
   );
@@ -130,6 +154,12 @@ const styles = StyleSheet.create({
   input: { borderBottomWidth: 1, padding: 8, borderColor: "#ccc" },
   errorInput: { borderColor: "red" },
   errorText: { color: "red", fontSize: 12, marginTop: 4 },
+  globalError: {
+    backgroundColor: "#FDECEA",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
 });
 
 export default AddServerForm;
