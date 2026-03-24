@@ -1,12 +1,14 @@
 import AddServerForm, { LoginFormValue } from "@/components/ui/add-server-form";
 import { useLazyTestConnectionQuery } from "@/state/api";
-import React, { useState } from "react";
-import { AppRegistry } from "react-native";
-import { expo as appName } from "../app.json";
 import { setCredentials } from "@/state/auth";
-import { useDispatch } from "react-redux";
 import { useRouter } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import React from "react";
 import { UseFormSetError } from "react-hook-form";
+import { AppRegistry } from "react-native";
+import { useDispatch } from "react-redux";
+import { expo as appName } from "../app.json";
+
 const AddServer = () => {
   const [triggerTest, { isLoading }] = useLazyTestConnectionQuery();
   const router = useRouter();
@@ -26,7 +28,14 @@ const AddServer = () => {
         "subsonic-response": { status },
       } = result;
       if (status === "ok") {
-        dispatch(setCredentials({ url: data.hostName, user: data.userName }));
+        dispatch(
+          setCredentials({
+            url: data.hostName,
+            user: data.userName,
+            password: data.password,
+          }),
+        );
+        await SecureStore.setItemAsync("navidrome_password", data.password);
         router.navigate("/musics");
       } else {
         setError("root", {
