@@ -1,6 +1,6 @@
 import { useGetSongsQuery } from "@/state/api";
 import { RootState } from "@/state/store";
-import { Text, View } from "react-native";
+import {Text, Touchable, TouchableOpacity, View} from "react-native";
 import { useSelector } from "react-redux";
 import { NavidromeSongType } from "../state/api";
 const Musics = () => {
@@ -59,42 +59,49 @@ const Musics = () => {
 
 interface SongProps {
   song: NavidromeSongType;
+  onSongTouch:(e: NavidromeSongType)=>void
 }
 
-const Song = ({ song }: SongProps) => {
+const Song = ({ song, onSongTouch }: SongProps) => {
+    const handleOnPress = ()=>{
+        onSongTouch(song)
+    }
   return (
-    <View
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        paddingHorizontal: 10,
-        marginBottom: 10,
-        alignItems: "center",
-      }}
-    >
-      <View
-        style={{
-          backgroundColor: "gray",
-          marginRight: 10,
-          borderRadius: 4,
-          height: 50,
-          width: 50,
-        }}
-      />
+      <TouchableOpacity onPress={handleOnPress}>
+          <View
+              style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  paddingHorizontal: 10,
+                  marginBottom: 10,
+                  alignItems: "center",
+              }}
+          >
+              <View
+                  style={{
+                      backgroundColor: "gray",
+                      marginRight: 10,
+                      borderRadius: 4,
+                      height: 50,
+                      width: 50,
+                  }}
+              />
 
-      <View
-        style={{
-          paddingBottom: 5,
-          borderBottomColor: "#eee",
-          borderBottomWidth: 1,
-        }}
-      >
-        <Text style={{ fontWeight: "600", fontSize: 16, color: "#000" }}>
-          {song.title}
-        </Text>
-        <Text style={{ color: "gray", fontSize: 14 }}>{song.artist}</Text>
-      </View>
-    </View>
+              <View
+                  style={{
+                      paddingBottom: 5,
+                      borderBottomColor: "#eee",
+                      borderBottomWidth: 1,
+                  }}
+              >
+                  <Text style={{ fontWeight: "600", fontSize: 16, color: "#000" }}>
+                      {song.title}
+                  </Text>
+                  <Text style={{ color: "gray", fontSize: 14 }}>{song.artist}</Text>
+              </View>
+          </View>
+      </TouchableOpacity>
+
   );
 };
 
@@ -102,10 +109,14 @@ interface ListSongProps {
   songs: NavidromeSongType[];
 }
 const ListSongs = ({ songs }: ListSongProps) => {
+    const handleSongTouch=(song: NavidromeSongType)=>{
+        // Navigate to media player ...
+        console.info(song)
+    }
   return (
     <View>
       {songs.map((song) => (
-        <Song key={song.id} song={song} />
+        <Song onSongTouch={(song)=>handleSongTouch(song)} key={song.id} song={song} />
       ))}
     </View>
   );
