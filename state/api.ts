@@ -7,9 +7,11 @@ export interface NavidromeAuthArgs {
   password: string;
 }
 
-export type Song = {
+export type NavidromeSongType = {
   title: string;
   id: string;
+  album: string;
+  artist: string;
 };
 
 export const navidromeApi = createApi({
@@ -34,7 +36,7 @@ export const navidromeApi = createApi({
       },
     }),
 
-    getSongs: builder.query<Song[], NavidromeAuthArgs>({
+    getSongs: builder.query<NavidromeSongType[], NavidromeAuthArgs>({
       query: ({ url, user, password }) => {
         const salt = Math.random().toString(36).substring(2);
         const token = md5(password + salt);
@@ -52,7 +54,7 @@ export const navidromeApi = createApi({
           },
         };
       },
-      transformResponse: (response: any): Song[] => {
+      transformResponse: (response: any): NavidromeSongType[] => {
         console.info(response);
         return response?.["subsonic-response"]?.searchResult3?.song || [];
       },
