@@ -8,13 +8,11 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
-import TrackPlayer from "react-native-track-player";
 import { Provider } from "react-redux";
 import { store } from "../state/store";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  TrackPlayer.setupPlayer()
   
 
   return (

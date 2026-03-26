@@ -1,12 +1,11 @@
 import { NavidromeSongType } from "@/state/api";
 import { RootState } from "@/state/store";
+import { useAudioPlayer } from 'expo-audio';
 import { useLocalSearchParams } from "expo-router";
 import md5 from "md5";
-import { useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
-import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player';
+import { Button, View } from 'react-native';
 import { useSelector } from "react-redux";
+ 
 
 const Player = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -23,61 +22,16 @@ const Player = () => {
   streamingUrl.searchParams.append("id", id)
   console.info(streamingUrl)
 
+    const player = useAudioPlayer(streamingUrl.toString(), {
+    updateInterval: 1000,
+    downloadFirst: true,
+  });
 
-  console.info(id, title);
-  return (
-    <AudioPlayer url={streamingUrl.toString()} title={title}/>
-  );
-};
 
-const AudioPlayer = ({ url, title }: { url: string, title: string }) => {
-  const playbackState = usePlaybackState();
-
-  useEffect(() => {
-    const setupAndPlay = async () => {
-      if (!url) return;
-
-      await TrackPlayer.reset();
-
-      await TrackPlayer.add({
-        id: 'subsonic-track', 
-        url: url,            
-        artist: 'Navidrome Stream',
-      });
-    };
-
-    setupAndPlay();
-  }, [url]);
-  const togglePlayback = async () => {
-    const state = (playbackState as any).state || playbackState; 
-
-    if (state === State.Playing) {
-      await TrackPlayer.pause();
-    } else {
-      await TrackPlayer.play();
-    }
-  };
-
-  const renderControl = () => {
-    const state = (playbackState as any).state || playbackState;
-
-    if (state === State.Buffering || state === State.Connecting) {
-      return <ActivityIndicator size="large" color="#1DB954" />;
-    }
-
-    return (
-      <TouchableOpacity onPress={togglePlayback}>
-        <Text>
-          {state === State.Playing ? "⏸ Pause" : "▶ Lecture"}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
 
   return (
-    <View>
-      <Text>{title || "Chargement..."}</Text>
-      <View>{renderControl()}</View>
+<View>
+      <Button title="Play Sound" onPress={() => player.play()} />
     </View>
   );
 };
