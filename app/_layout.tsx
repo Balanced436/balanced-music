@@ -13,7 +13,6 @@ import { store } from "../state/store";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
-  
 
   return (
     <Provider store={store}>
