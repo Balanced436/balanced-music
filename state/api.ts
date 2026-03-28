@@ -14,44 +14,40 @@ export type NavidromeSongType = {
   artist: string;
 };
 
+const getNavidromeParams = (user: string, password: string) => {
+  const salt = Math.random().toString(36).substring(2);
+  return {
+    u: user,
+    t: md5(password + salt),
+    s: salt,
+    v: "1.16.1",
+    c: "MyApp",
+    f: "json"
+  };
+};
+
 export const navidromeApi = createApi({
   reducerPath: "navidromeApi",
   baseQuery: fetchBaseQuery({ baseUrl: "" }),
   endpoints: (builder) => ({
     testConnection: builder.query<any, NavidromeAuthArgs>({
       query: ({ url, user, password }) => {
-        const salt = Math.random().toString(36).substring(2);
-        const token = md5(password + salt);
+        const authParams = getNavidromeParams(user,password)
         return {
           url: `${url}/rest/ping.view`,
-          params: {
-            u: user,
-            t: token,
-            s: salt,
-            v: "1.16.1",
-            c: "MyReactMusicApp",
-            f: "json",
-          },
+          params: {...authParams},
         };
       },
     }),
 
     getSongs: builder.query<NavidromeSongType[], NavidromeAuthArgs>({
       query: ({ url, user, password }) => {
-        const salt = Math.random().toString(36).substring(2);
-        const token = md5(password + salt);
+        const authParams = getNavidromeParams(user,password)
+
 
         return {
           url: `${url}/rest/search3`,
-          params: {
-            u: user,
-            t: token,
-            s: salt,
-            v: "1.16.1",
-            c: "MyReactMusicApp",
-            f: "json",
-            songCount: 500,
-          },
+          params: {...authParams},
         };
       },
       transformResponse: (response: any): NavidromeSongType[] => {
