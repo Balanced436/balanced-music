@@ -12,6 +12,7 @@ export type NavidromeSongType = {
   id: string;
   album: string;
   artist: string;
+  streamingUrl: string;
 };
 
 const getNavidromeParams = (user: string, password: string) => {
@@ -25,6 +26,7 @@ const getNavidromeParams = (user: string, password: string) => {
     f: "json"
   };
 };
+
 
 export const navidromeApi = createApi({
   reducerPath: "navidromeApi",
@@ -50,10 +52,23 @@ export const navidromeApi = createApi({
           params: {...authParams},
         };
       },
-      transformResponse: (response: any): NavidromeSongType[] => {
-        console.info(response);
-        return response?.["subsonic-response"]?.searchResult3?.song || [];
-      },
+    transformResponse: (response: any, _, arg: NavidromeAuthArgs): NavidromeSongType[] => {
+      const { url, user, password } = arg;
+      const authParams = getNavidromeParams(user, password);
+      const songs = response?.["subsonic-response"]?.searchResult3?.song || [];
+
+      return songs.map((song: any) => {
+        const queryParams = new URLSearchParams({ 
+          ...authParams, 
+          id: song.id 
+        }).toString();
+
+        return {
+          ...song,
+          streamingUrl: `${url}/rest/stream.view?${queryParams}`
+        };
+      });
+    }
     }),
   }),
 });
