@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NavidromeSongType } from './api';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { NavidromeSongType } from "./api";
 
 interface PlaylistState {
   currentPlaylist: {
@@ -13,10 +13,13 @@ const initialState: PlaylistState = {
 };
 
 export const playlistSlice = createSlice({
-  name: 'playlist',
+  name: "playlist",
   initialState,
   reducers: {
-    setCurrentPlaylist: (state, action: PayloadAction<{title: string, songs: NavidromeSongType[]}>) => {
+    setCurrentPlaylist: (
+      state,
+      action: PayloadAction<{ title: string; songs: NavidromeSongType[] }>,
+    ) => {
       state.currentPlaylist = action.payload;
     },
   },

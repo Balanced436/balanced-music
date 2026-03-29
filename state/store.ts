@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     [navidromeApi.reducerPath]: navidromeApi.reducer,
-    playlist: playlistSlice.reducer
+    playlist: playlistSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(navidromeApi.middleware),
