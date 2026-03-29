@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { navidromeApi } from "./api";
-import { authSlice } from "./auth";
+import { authSlice } from "./auth-slice";
+import { playlistSlice } from "./playlist-slice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     [navidromeApi.reducerPath]: navidromeApi.reducer,
+    playlist: playlistSlice.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(navidromeApi.middleware),

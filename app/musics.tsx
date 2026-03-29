@@ -108,7 +108,7 @@ const Song = ({ song, onSongTouch }: SongProps) => {
 interface ListSongProps {
   songs: NavidromeSongType[];
 }
-const ListSongs = ({ songs }: ListSongProps) => {
+export const ListSongs = ({ songs }: ListSongProps) => {
   const router = useRouter();
   // navigate to the player
   const handleSongTouch = (song: NavidromeSongType) => {

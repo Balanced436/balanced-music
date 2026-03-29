@@ -1,6 +1,6 @@
 import AddServerForm, { LoginFormValue } from "@/components/ui/add-server-form";
 import { useLazyTestConnectionQuery } from "@/state/api";
-import { setCredentials } from "@/state/auth";
+import { setCredentials } from "@/state/auth-slice";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import React from "react";
@@ -36,7 +36,7 @@ const AddServer = () => {
           }),
         );
         await SecureStore.setItemAsync("navidrome_password", data.password);
-        router.navigate("/musics");
+        router.navigate("/library");
       } else {
         setError("root", {
           type: "manual",
