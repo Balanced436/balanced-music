@@ -68,23 +68,29 @@ const AudioPlayer = ({ uri, metada }: AudioPlayerProps) => {
     status.duration > 0 ? status.currentTime / status.duration : 0;
 
   return (
-    <View style={{ padding: 20 }}>
+  <View style={{ padding: 10, flexDirection: "column", height: "100%" }}>
+    <View style={{ backgroundColor: "gray", flex: 1 }}>
+    </View>
+    <View style={{ paddingVertical: 20 }}>
       <View
         style={{
           flexDirection: "row",
           justifyContent: "space-around",
-          marginBottom: 20,
+          marginBottom: 20
         }}
       >
+        <IconButton icon="repeat" selected={player.loop} onPress={(e)=>player.loop = !player.loop}></IconButton>
+        
+        <View style={{flexDirection: "row"}}>
         <IconButton
           icon="skip-previous"
           onPress={() => player.seekTo(Math.max(0, status.currentTime - 30))}
         />
 
         {status.playing ? (
-          <IconButton icon="pause" onPress={() => player.play()} />
+          <IconButton icon="pause" onPress={() => player.pause()} />
         ) : (
-          <IconButton icon="play" onPress={() => player.pause()} />
+          <IconButton icon="play" onPress={() => player.play()} />
         )}
 
         <IconButton
@@ -93,14 +99,19 @@ const AudioPlayer = ({ uri, metada }: AudioPlayerProps) => {
             player.seekTo(Math.min(status.duration, status.currentTime + 30))
           }
         />
+
+        </View>
+      <IconButton icon="shuffle"></IconButton>
       </View>
 
       <View>
-        <View>
-          <Text>{metada?.title}</Text>
-          <Text>{metada?.album}</Text>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={{ fontWeight: 'bold' }}>{metada?.title}</Text>
+          <Text style={{ color: 'gray' }}>{metada?.album}</Text>
         </View>
+        
         <ProgressBar progress={progress} color="#007AFF" />
+        
         <View
           style={{
             flexDirection: "row",
@@ -113,7 +124,8 @@ const AudioPlayer = ({ uri, metada }: AudioPlayerProps) => {
         </View>
       </View>
     </View>
-  );
+  </View>
+);
 };
 
 export default Player;
