@@ -1,4 +1,3 @@
-import AudioPlayer from "@/components/ui/audio-player";
 import { NavidromeSongType } from "@/state/api";
 import { RootState } from "@/state/store";
 import { useLocalSearchParams } from "expo-router";
@@ -21,11 +20,7 @@ const Player = () => {
   streamingUrl.searchParams.append("id", metada.id);
   console.info(streamingUrl);
 
-  return (
-    <View>
-      <AudioPlayer metada={metada} uri={streamingUrl}></AudioPlayer>
-    </View>
-  );
+  return <View></View>;
 };
 
 export default Player;

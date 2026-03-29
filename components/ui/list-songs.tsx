@@ -1,5 +1,4 @@
 import { NavidromeSongType } from "@/state/api";
-import { useRouter } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 
 interface SongProps {
@@ -49,22 +48,41 @@ const Song = ({ song, onSongTouch }: SongProps) => {
   );
 };
 
+/**
+ * Props for the ListSongs component.
+ */
 interface ListSongProps {
+  /** Array of song objects retrieved from the Navidrome API. */
   songs: NavidromeSongType[];
+
+  /** * Callback function triggered when a song is tapped.
+   * @param song - The specific song object that was touched.
+   * @param index - The position of the song within the playlist array.
+   */
+  onSongTouch: (song: NavidromeSongType, index: number) => void;
 }
-export const ListSongs = ({ songs }: ListSongProps) => {
-  const router = useRouter();
-  // navigate to the player
-  const handleSongTouch = (song: NavidromeSongType) => {
-    // Navigate to media player ...
-    console.info(song);
-    router.navigate({ pathname: "/player", params: song });
+
+/**
+ * Renders a vertical list of songs.
+ * * This component maps through the provided songs and renders a individual
+ * `Song` component for each entry. It handles the touch interaction by
+ * providing the song data and its index back to the parent.
+ */
+export const ListSongs = ({ songs, onSongTouch }: ListSongProps) => {
+  /**
+   * Internal handler to bridge the Song touch event to the parent's callback.
+   */
+  const handleSongTouch = (song: NavidromeSongType, index: number) => {
+    onSongTouch(song, index);
+    // Note: Navigation is usually handled by the parent or via Redux
+    // router.navigate({ pathname: "/player", params: song });
   };
+
   return (
     <View>
-      {songs.map((song) => (
+      {songs.map((song, index) => (
         <Song
-          onSongTouch={(song) => handleSongTouch(song)}
+          onSongTouch={(song) => handleSongTouch(song, index)}
           key={song.id}
           song={song}
         />
