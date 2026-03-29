@@ -71,7 +71,15 @@ const AudioPlayer = ({ playlist, songIndex = 0 }: AudioPlayerProps) => {
 
   return (
     <View style={{ padding: 10, flexDirection: "column", height: "100%"}}>
-      <Text style={{color: "gray", alignSelf: "center", paddingBottom: 10 }}>{playlist.title}</Text>
+      <View style={{ height: 50, justifyContent: "center", alignItems: "center" }}>
+        <View style={{ position: "absolute", left: 0 }}>
+          <IconButton icon="chevron-down" />
+        </View>
+
+        <Text style={{ color: "gray", fontWeight: "600" }}>
+          {playlist.title}
+        </Text>
+      </View>
       <View style={{ backgroundColor: "gray", flex: 1 }}></View>
       <View style={{ paddingVertical: 20 }}>
         <View
