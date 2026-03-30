@@ -6,10 +6,15 @@ interface PlaylistState {
     title: string;
     songs: NavidromeSongType[];
   } | null;
+
+  fullScreenPlayer: boolean
+  miniPlayer:boolean
 }
 
 const initialState: PlaylistState = {
   currentPlaylist: null,
+  fullScreenPlayer: false,
+  miniPlayer: false
 };
 
 export const playlistSlice = createSlice({
@@ -22,7 +27,14 @@ export const playlistSlice = createSlice({
     ) => {
       state.currentPlaylist = action.payload;
     },
-  },
+    setFullScreenVisibility: (
+      state,
+      action: PayloadAction<boolean>,
+    ) => {
+      state.fullScreenPlayer = action.payload;
+    },
+    },
+
 });
 
-export const { setCurrentPlaylist } = playlistSlice.actions;
+export const { setCurrentPlaylist, setFullScreenVisibility } = playlistSlice.actions;

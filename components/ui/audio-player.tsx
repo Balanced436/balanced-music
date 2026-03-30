@@ -24,6 +24,7 @@ const formatTime = (seconds: number): string => {
 interface AudioPlayerProps {
   playlist: Playlist;
   songIndex?: number;
+  onMinimize: ()=>void
 }
 
 /**
@@ -33,7 +34,7 @@ interface AudioPlayerProps {
  * @param {Playlist} props.playlist - The playlist object containing the title and song array.
  * @param {number} [props.songIndex=0] - The starting index of the song to be played.
  */
-const AudioPlayer = ({ playlist, songIndex = 0 }: AudioPlayerProps) => {
+const AudioPlayer = ({ playlist, songIndex = 0, onMinimize }: AudioPlayerProps) => {
   const player = useGlobalPlayer();
   if (!player) return;
   const status = useAudioPlayerStatus(player);
@@ -74,7 +75,7 @@ const AudioPlayer = ({ playlist, songIndex = 0 }: AudioPlayerProps) => {
         style={{ height: 50, justifyContent: "center", alignItems: "center" }}
       >
         <View style={{ position: "absolute", left: 0 }}>
-          <IconButton icon="chevron-down" />
+          <IconButton icon="chevron-down" onPress={()=>onMinimize()}/>
         </View>
 
         <Text style={{ color: "gray", fontWeight: "600" }}>

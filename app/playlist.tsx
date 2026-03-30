@@ -1,16 +1,18 @@
 import AudioPlayer from "@/components/ui/audio-player";
 import { NavidromeSongType } from "@/state/api";
+import { setFullScreenVisibility } from "@/state/playlist-slice";
 import { RootState } from "@/state/store";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { Modal, Portal } from "react-native-paper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ListSongs } from "../components/ui/list-songs";
 
 const Playlist = () => {
   const { currentPlaylist } = useSelector((state: RootState) => state.playlist);
+  const {fullScreenPlayer} = useSelector((state: RootState)=>state.playlist)
   const [currentIndexSong, setCurrentIndexSong] = useState(0);
-  const [isPlayerModalVisible, setPlayerModalVisibility] = useState(false);
+  const dispatch = useDispatch()
 
   if (!currentPlaylist) {
     return (
@@ -24,7 +26,7 @@ const Playlist = () => {
     // open audio player
     console.info(index, song);
     setCurrentIndexSong(index);
-    setPlayerModalVisibility(true);
+    dispatch(setFullScreenVisibility(true))
   };
   const containerStyle = { backgroundColor: "white", padding: 20 };
 
@@ -37,13 +39,14 @@ const Playlist = () => {
       <ListSongs onSongTouch={handleSongTouch} songs={currentPlaylist.songs} />
       <Portal>
         <Modal
-          visible={isPlayerModalVisible}
-          onDismiss={() => setPlayerModalVisibility(false)}
+          visible={fullScreenPlayer}
+          onDismiss={() => dispatch(setFullScreenVisibility(false))}
           contentContainerStyle={containerStyle}
         >
           <AudioPlayer
             songIndex={currentIndexSong}
             playlist={currentPlaylist}
+            onMinimize={()=>dispatch(setFullScreenVisibility(false))}
           ></AudioPlayer>
         </Modal>
       </Portal>
