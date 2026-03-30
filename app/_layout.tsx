@@ -9,21 +9,25 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
+import { AudioProvider } from "@/providers/player-context";
 import { Provider } from "react-redux";
 import { store } from "../state/store";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
+  // https://github.com/callstack/react-native-paper/issues/3880 put contexts on top of paperprovider
   return (
-    <PaperProvider>
-      <Provider store={store}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack></Stack>
-        </ThemeProvider>
-      </Provider>
-    </PaperProvider>
+    <Provider store={store}>
+      <AudioProvider>
+        <PaperProvider>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack></Stack>
+          </ThemeProvider>
+        </PaperProvider>
+      </AudioProvider>
+    </Provider>
   );
 }

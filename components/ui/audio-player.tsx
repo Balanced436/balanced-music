@@ -1,8 +1,6 @@
 import { Playlist } from "@/app/library";
-import {
-  useAudioPlayer,
-  useAudioPlayerStatus,
-} from "expo-audio/build/ExpoAudio";
+import { useGlobalPlayer } from "@/providers/player-context";
+import { useAudioPlayerStatus } from "expo-audio/build/ExpoAudio";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { IconButton, ProgressBar } from "react-native-paper";
@@ -36,7 +34,8 @@ interface AudioPlayerProps {
  * @param {number} [props.songIndex=0] - The starting index of the song to be played.
  */
 const AudioPlayer = ({ playlist, songIndex = 0 }: AudioPlayerProps) => {
-  const player = useAudioPlayer();
+  const player = useGlobalPlayer();
+  if (!player) return;
   const status = useAudioPlayerStatus(player);
 
   const [currentIdx, setCurrentIdx] = useState(songIndex);
@@ -70,8 +69,10 @@ const AudioPlayer = ({ playlist, songIndex = 0 }: AudioPlayerProps) => {
     status.duration > 0 ? status.currentTime / status.duration : 0;
 
   return (
-    <View style={{ padding: 10, flexDirection: "column", height: "100%"}}>
-      <View style={{ height: 50, justifyContent: "center", alignItems: "center" }}>
+    <View style={{ padding: 10, flexDirection: "column", height: "100%" }}>
+      <View
+        style={{ height: 50, justifyContent: "center", alignItems: "center" }}
+      >
         <View style={{ position: "absolute", left: 0 }}>
           <IconButton icon="chevron-down" />
         </View>
