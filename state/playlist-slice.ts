@@ -9,12 +9,14 @@ interface PlaylistState {
 
   fullScreenPlayer: boolean
   miniPlayer:boolean
+  songIndex: number
 }
 
 const initialState: PlaylistState = {
   currentPlaylist: null,
   fullScreenPlayer: false,
-  miniPlayer: false
+  miniPlayer: false,
+  songIndex: 0
 };
 
 export const playlistSlice = createSlice({
@@ -33,8 +35,14 @@ export const playlistSlice = createSlice({
     ) => {
       state.fullScreenPlayer = action.payload;
     },
+        setSongIndex: (
+      state,
+      action: PayloadAction<number>,
+    ) => {
+      state.songIndex = action.payload
+    },
     },
 
 });
 
-export const { setCurrentPlaylist, setFullScreenVisibility } = playlistSlice.actions;
+export const { setCurrentPlaylist, setFullScreenVisibility, setSongIndex } = playlistSlice.actions;

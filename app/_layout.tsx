@@ -9,6 +9,7 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
+import AudioPlayer from "@/components/ui/audio-player";
 import { AudioProvider } from "@/providers/player-context";
 import { Provider } from "react-redux";
 import { store } from "../state/store";
@@ -25,6 +26,7 @@ export default function RootLayout() {
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
             <Stack></Stack>
+            <AudioPlayer/>
           </ThemeProvider>
         </PaperProvider>
       </AudioProvider>
