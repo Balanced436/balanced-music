@@ -78,9 +78,7 @@ const AudioPlayer = () => {
 
   const containerStyle = { backgroundColor: "white", padding: 20 };
 
-  return (
-    <Portal>
-      <Modal
+  return <Modal
         visible={fullScreenPlayer}
         onDismiss={() => dispatch(setFullScreenVisibility(false))}
         contentContainerStyle={containerStyle}
@@ -168,8 +166,6 @@ const AudioPlayer = () => {
           </View>
         </View>
       </Modal>
-    </Portal>
-  );
 };
 
 export default AudioPlayer;

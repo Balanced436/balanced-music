@@ -8,7 +8,7 @@ type AudioProviderProps = {
   children: React.ReactNode;
 };
 export const AudioProvider = ({ children }: AudioProviderProps) => {
-  const player = useAudioPlayer();
+  const player = useAudioPlayer(null, {updateInterval: 1000});
   return (
     <AudioContext.Provider value={player}>{children}</AudioContext.Provider>
   );
