@@ -5,7 +5,7 @@ import { RootState } from "@/state/store";
 import { useAudioPlayerStatus } from "expo-audio/build/ExpoAudio";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
-import { IconButton, Modal, Portal, ProgressBar } from "react-native-paper";
+import { IconButton, Modal, ProgressBar } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 
 const formatTime = (seconds: number): string => {
@@ -52,6 +52,11 @@ const AudioPlayer = () => {
     const song = currentPlaylist?.songs[songIndex];
     if (song) {
       player.replace(song.streamingUrl);
+      player.setActiveForLockScreen(true, {
+      title: currentPlaylist?.songs[songIndex].title,
+      artist: currentPlaylist?.songs[songIndex].artist,
+      albumTitle: currentPlaylist?.songs[songIndex].album,
+      })
       player.play();
     }
   }, [songIndex, player]);
