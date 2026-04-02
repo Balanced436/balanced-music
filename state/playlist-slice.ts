@@ -7,16 +7,16 @@ interface PlaylistState {
     songs: NavidromeSongType[];
   } | null;
 
-  fullScreenPlayer: boolean
-  miniPlayer:boolean
-  songIndex: number
+  fullScreenPlayer: boolean;
+  miniPlayer: boolean;
+  songIndex: number;
 }
 
 const initialState: PlaylistState = {
   currentPlaylist: null,
   fullScreenPlayer: false,
   miniPlayer: false,
-  songIndex: 0
+  songIndex: 0,
 };
 
 export const playlistSlice = createSlice({
@@ -29,20 +29,14 @@ export const playlistSlice = createSlice({
     ) => {
       state.currentPlaylist = action.payload;
     },
-    setFullScreenVisibility: (
-      state,
-      action: PayloadAction<boolean>,
-    ) => {
+    setFullScreenVisibility: (state, action: PayloadAction<boolean>) => {
       state.fullScreenPlayer = action.payload;
     },
-        setSongIndex: (
-      state,
-      action: PayloadAction<number>,
-    ) => {
-      state.songIndex = action.payload
+    setSongIndex: (state, action: PayloadAction<number>) => {
+      state.songIndex = action.payload;
     },
-    },
-
+  },
 });
 
-export const { setCurrentPlaylist, setFullScreenVisibility, setSongIndex } = playlistSlice.actions;
+export const { setCurrentPlaylist, setFullScreenVisibility, setSongIndex } =
+  playlistSlice.actions;

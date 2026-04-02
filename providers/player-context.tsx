@@ -8,13 +8,13 @@ type AudioProviderProps = {
   children: React.ReactNode;
 };
 export const AudioProvider = ({ children }: AudioProviderProps) => {
-  const player = useAudioPlayer(null, {updateInterval: 1000});
+  const player = useAudioPlayer(null, { updateInterval: 1000 });
 
-    useEffect(() => {
+  useEffect(() => {
     setAudioModeAsync({
       playsInSilentMode: true,
       shouldPlayInBackground: true,
-      interruptionMode: 'doNotMix',
+      interruptionMode: "doNotMix",
     });
   }, []);
   return (

@@ -53,10 +53,10 @@ const AudioPlayer = () => {
     if (song) {
       player.replace(song.streamingUrl);
       player.setActiveForLockScreen(true, {
-      title: currentPlaylist?.songs[songIndex].title,
-      artist: currentPlaylist?.songs[songIndex].artist,
-      albumTitle: currentPlaylist?.songs[songIndex].album,
-      })
+        title: currentPlaylist?.songs[songIndex].title,
+        artist: currentPlaylist?.songs[songIndex].artist,
+        albumTitle: currentPlaylist?.songs[songIndex].album,
+      });
       player.play();
     }
   }, [songIndex, player]);
@@ -83,94 +83,96 @@ const AudioPlayer = () => {
 
   const containerStyle = { backgroundColor: "white", padding: 20 };
 
-  return <Modal
-        visible={fullScreenPlayer}
-        onDismiss={() => dispatch(setFullScreenVisibility(false))}
-        contentContainerStyle={containerStyle}
-      >
-        <View style={{ padding: 10, flexDirection: "column", height: "100%" }}>
+  return (
+    <Modal
+      visible={fullScreenPlayer}
+      onDismiss={() => dispatch(setFullScreenVisibility(false))}
+      contentContainerStyle={containerStyle}
+    >
+      <View style={{ padding: 10, flexDirection: "column", height: "100%" }}>
+        <View
+          style={{
+            height: 50,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View style={{ position: "absolute", left: 0 }}>
+            <IconButton
+              icon="chevron-down"
+              onPress={() => dispatch(setFullScreenVisibility(false))}
+            />
+          </View>
+
+          <Text style={{ color: "gray", fontWeight: "600" }}>
+            {playlistTitle}
+          </Text>
+        </View>
+        <View style={{ backgroundColor: "gray", flex: 1 }}></View>
+        <View style={{ paddingVertical: 20 }}>
           <View
             style={{
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginBottom: 20,
             }}
           >
-            <View style={{ position: "absolute", left: 0 }}>
+            <IconButton
+              icon="repeat"
+              selected={player.loop}
+              onPress={(e) => (player.loop = !player.loop)}
+            ></IconButton>
+
+            <View style={{ flexDirection: "row" }}>
               <IconButton
-                icon="chevron-down"
-                onPress={() => dispatch(setFullScreenVisibility(false))}
+                icon="skip-previous"
+                onPress={() => {
+                  playPrevious();
+                }}
               />
+
+              {status.playing ? (
+                <IconButton icon="pause" onPress={() => player.pause()} />
+              ) : (
+                <IconButton icon="play" onPress={() => player.play()} />
+              )}
+
+              <IconButton icon="skip-next" onPress={() => playNext()} />
+            </View>
+            <IconButton icon="shuffle"></IconButton>
+          </View>
+
+          <View>
+            <View style={{ marginBottom: 10 }}>
+              <Text style={{ fontWeight: "bold" }}>
+                {currentPlaylist?.songs[songIndex].title}
+              </Text>
+              <Text style={{ color: "gray" }}>
+                {currentPlaylist?.songs[songIndex].album}
+              </Text>
             </View>
 
-            <Text style={{ color: "gray", fontWeight: "600" }}>
-              {playlistTitle}
-            </Text>
-          </View>
-          <View style={{ backgroundColor: "gray", flex: 1 }}></View>
-          <View style={{ paddingVertical: 20 }}>
+            <ProgressBar progress={progress} color="#007AFF" />
+
             <View
               style={{
                 flexDirection: "row",
-                justifyContent: "space-around",
-                marginBottom: 20,
+                justifyContent: "space-between",
+                marginTop: 5,
               }}
             >
-              <IconButton
-                icon="repeat"
-                selected={player.loop}
-                onPress={(e) => (player.loop = !player.loop)}
-              ></IconButton>
-
-              <View style={{ flexDirection: "row" }}>
-                <IconButton
-                  icon="skip-previous"
-                  onPress={() => {
-                    playPrevious();
-                  }}
-                />
-
-                {status.playing ? (
-                  <IconButton icon="pause" onPress={() => player.pause()} />
-                ) : (
-                  <IconButton icon="play" onPress={() => player.play()} />
-                )}
-
-                <IconButton icon="skip-next" onPress={() => playNext()} />
-              </View>
-              <IconButton icon="shuffle"></IconButton>
-            </View>
-
-            <View>
-              <View style={{ marginBottom: 10 }}>
-                <Text style={{ fontWeight: "bold" }}>
-                  {currentPlaylist?.songs[songIndex].title}
-                </Text>
-                <Text style={{ color: "gray" }}>
-                  {currentPlaylist?.songs[songIndex].album}
-                </Text>
-              </View>
-
-              <ProgressBar progress={progress} color="#007AFF" />
-
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginTop: 5,
-                }}
-              >
-                <Text style={{ fontSize: 12 }}>
-                  {formatTime(status.currentTime)}
-                </Text>
-                <Text style={{ fontSize: 12 }}>
-                  {formatTime(status.duration)}
-                </Text>
-              </View>
+              <Text style={{ fontSize: 12 }}>
+                {formatTime(status.currentTime)}
+              </Text>
+              <Text style={{ fontSize: 12 }}>
+                {formatTime(status.duration)}
+              </Text>
             </View>
           </View>
         </View>
-      </Modal>
+      </View>
+    </Modal>
+  );
 };
 
 export default AudioPlayer;

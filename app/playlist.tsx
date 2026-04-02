@@ -8,7 +8,7 @@ import { ListSongs } from "../components/ui/list-songs";
 
 const Playlist = () => {
   const { currentPlaylist } = useSelector((state: RootState) => state.playlist);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   if (!currentPlaylist) {
     return (
@@ -19,8 +19,8 @@ const Playlist = () => {
   }
 
   const handleSongTouch = (song: NavidromeSongType, index: number) => {
-    dispatch(setSongIndex(index))
-    dispatch(setFullScreenVisibility(true))
+    dispatch(setSongIndex(index));
+    dispatch(setFullScreenVisibility(true));
   };
 
   return (

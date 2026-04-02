@@ -13,7 +13,7 @@ import AudioPlayer from "@/components/ui/audio-player";
 import { AudioProvider } from "@/providers/player-context";
 import { Provider } from "react-redux";
 import { store } from "../state/store";
-import {MiniAudioPlayer} from "@/components/ui/mini-audio-player";
+import { MiniAudioPlayer } from "@/components/ui/mini-audio-player";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -27,8 +27,8 @@ export default function RootLayout() {
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
             <Stack></Stack>
-            <MiniAudioPlayer/>
-            <AudioPlayer/>
+            <MiniAudioPlayer />
+            <AudioPlayer />
           </ThemeProvider>
         </PaperProvider>
       </AudioProvider>
